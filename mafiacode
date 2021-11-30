@@ -1,0 +1,83 @@
+%% MAFIA
+%Beginning statements 
+numOfPlayers = input('Enter number of players: ');
+while numOfPlayers < 4 
+    fprintf('Number of players must be greater than or equal to four.\n')
+    numOfPlayers = input('Enter number of players: ');
+end
+
+for i = 1:numOfPlayers
+    fprintf('Enter player #%i''s name: ', i)
+    Name{i} = input('', 's');   
+end                                                          
+Player(i) = Name(i); %Stores Name index in a Player index 
+%Assigning Roles: 
+Roles = [0 0 0 0]; %initializing the array
+for i = 1:3
+    Roles(i) = i;
+end
+for i = 4:numOfPlayers
+    Roles(i) = 4;
+end
+Roles = Roles(randperm(length(Roles))); %TEST: Good
+
+%Day time 
+gameOver = false; 
+day = true;
+numPlayersLeft = numOfPlayers;
+Round = 1;
+NightRound = 1;
+oldLengthPlayersKilled=0;
+chosenPlayersSaved = 0;
+for i = 1:numOfPlayers %Finds out the roles 
+     if Roles(i) == 1
+        MafiaIndex = i;
+     end
+     if Roles(i) == 2
+        DocIndex = i;
+     end
+     if Roles(i) == 3
+        DetectiveIndex = i;
+     end
+end
+while ~gameOver %While NOT game over
+ clc 
+ if day  %DAY TIME: Daytime description goes here 
+    if Round == 1 %% No deaths occur on day one
+        fprintf('Today is day 1. No voting will occur today.\nPrepare. The Mafia strikes tonight.')
+    else 
+     fprintf('Today is day %i.\n', Round) 
+     fprintf('Last night, the Mafia came.\n')
+     if oldLengthPlayersKilled ~= length(playersKilled) && ~chosenPlayerSaved %Updated in Night
+         fprintf('1 player died.')
+         oldLengthPlayersKilled = length(playersKilled);
+     else       
+         fprintf('Nobody died.')
+     end
+         
+    end    
+ else %night
+     if Round == 1
+         
+        
+     else
+         
+         %Night code for remaining rounds 
+         
+         
+         
+     end
+    for i = 1:numOfPlayers 
+        
+    end
+ 
+    %Ask players given prompts based on their roles 
+    % (is user civilian, mafia, doctor, or detective? 
+    % Mafia = 1, Doctor = 2, Detective = 3, Civilian = 4
+    NightRound = NightRound + 1;  
+ end
+ day = ~day;
+ Round = Round + 1; %One round is day + night
+end
+
+
