@@ -1,3 +1,7 @@
+clear
+clc
+close all 
+
 %% MAFIA
 %Beginning statements 
 numOfPlayers = input('Enter number of players: ');
@@ -6,9 +10,19 @@ while numOfPlayers < 4
     numOfPlayers = input('Enter number of players: ');
 end
 
+Name = [];
 for i = 1:numOfPlayers
-    fprintf('Enter player #%i''s name: ', i)
-    Name{i} = input('', 's');   
+    enteredName = false;
+    while ~enteredName
+        fprintf('Enter player #%i''s name: ', i);
+        userInput = input('', 's');   
+        if ~ismember(userInput, Name)
+            Name{i} = userInput;
+            enteredName = true;
+        else
+            fprintf('Names must be unique.\n')
+        end
+    end
 end                                                          
 Player(i) = Name(i); %Stores Name index in a Player index 
 %Assigning Roles: 
@@ -55,22 +69,33 @@ while ~gameOver %While NOT game over
          fprintf('Nobody died.')
      end
          
-    end    
+    end   
+    day = ~day;
  else %night
-     if Round == 1
-         
-        
-     else
-         
-         %Night code for remaining rounds 
-         
-         
-         
-     end
+   
+    k = 1;
     for i = 1:numOfPlayers 
-        
+        fprintf('It''s player %i''s turn. Type "c" to continue.\n', i)
+        input = input('', 's');
+        if input == 'c'
+            continue1 = true;
+        end
+     while continue1
+        if Roles(i) == 1
+            fprintf('Who would you like to kill?\n') 
+            chosenPlayerKilled = input('','s')
+           k = k + 1; 
+        elseif Roles(i) == 2
+                fprintf('Who would you like to save?\n')
+                chosePlayerSaved = input('', 's')
+        elseif Roles(i) == 3
+                fprintf('Who would you like to investigate?')
+            else 
+                fprintf('Who do you think is in the Mafia?') 
+        end
+                continue1 = false;
+        end
     end
- 
     %Ask players given prompts based on their roles 
     % (is user civilian, mafia, doctor, or detective? 
     % Mafia = 1, Doctor = 2, Detective = 3, Civilian = 4
