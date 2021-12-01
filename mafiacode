@@ -1,7 +1,8 @@
 
-clear 
+clear
 clc
-%% MAFIA
+close all   
+
 %Beginning statements 
 numOfPlayers = input('Enter number of players: ');
 while numOfPlayers < 4 
@@ -44,7 +45,7 @@ for i = 1:numOfPlayers %Finds out the roles
         DetectiveIndex = i;
      end
 end
-%Day time 
+ 
 gameOver = false; %Change when Mafia is voted or there are only two players left.
 day = true;
 numPlayersLeft = numOfPlayers;
@@ -53,69 +54,116 @@ NightRound = 1;
 oldLengthPlayersKilled=0;
 chosenPlayersSaved = 0;
 playersKilled = 0;
+chosenPlayerKilled = 0;
+chosenPlayerSavedIndex = 0;
+chosenPlayerKilledIndex = 0;
+
+for i = 1:numOfPlayers %Doctor: Players start off with 0 immunity
+    tempimmunity{i} = false;
+    playerTurn{i} = i;
+end
 while ~gameOver %While NOT game over 
- if day  %DAY TIME: Daytime description goes here 
-    continue0 = false;
-    while ~continue0
-     if Round == 1 %% No deaths occur on day one
-        fprintf('Today is day 1. No voting will occur today.\nPrepare. The Mafia strikes tonight.\n')
-        ContInput1 = input('Type "c" to continue.\n');
-        if ContInput1 == 'c'
-            continue0 = true;
-        else 
-            continue0 = false;
-        end
-     elseif 
-     fprintf('Today is day %i.\n', Round) 
-     fprintf('Last night, the Mafia came.\n')
-     if oldLengthPlayersKilled ~= length(playersKilled) && ~chosenPlayerSaved %Updated in Night
-         fprintf('1 player died.')
-         oldLengthPlayersKilled = length(playersKilled);
-     else       
-         fprintf('Nobody died.')
-     end
-         
-    end   
-    end
- else %night
-    k = 1;
+ while day  %DAY TIME: Daytime description goes here 
     continue1 = false;
     while ~continue1
-    for i = 1:numOfPlayers 
-        fprintf('It''s player %i''s turn. Type "c" to continue.\n', i)
-        ContInput2 = input('', 's');
-        if ContInput2 == 'c'
-            continue1 = true;
-        else
-            continue1 = false;
+         if Round == 1 %% No deaths occur on day one
+            fprintf('Today is day 1. No voting will occur today.\nPrepare. The Mafia strikes tonight.\n')
+            ContInput1 = input('Type "c" to continue.\n', 's');
+                if ContInput1 == 'c'
+                    continue1 = true;
+                    day = ~day;
+                    clc
+                else 
+                    continue1 = false;
+                end
+         else  % every other round  
+             fprintf('Today is day %i.\n', Round) 
+             fprintf('Last night, the Mafia came.\n')
+             if oldLengthPlayersKilled ~= length(playersKilled) %Updated in Night
+                fprintf('1 player died.')       
+                oldLengthPlayersKilled = length(playersKilled);
+             else       
+                fprintf('Nobody died.')
+             end  
+             fprintf('Voting will occur today. Choose wisely.\n')
+             fprintf('For now, we will revisit the actions of the players we saw last night.\n') %CONTINUE
+         end   
+    end 
+    for i = 1:numOfPlayers %Players start off with 0 immunity
+        tempimmunity{i} = false;
+    end
+    chosenPlayerSaved = false;
+                                        %DAY ENDS
+ while ~day %is Night
+    k = 1;
+    continue2 = false;
+    while ~continue2
+        for i = 1:numOfPlayers 
+            fprintf('It''s player %i''s turn. Type "c" to continue.\n', i)
+            ContInput2 = input('', 's');
+            if ContInput2 == 'c'
+                continue2 = true;
+            else
+                continue2 = false;
+            end
         end
     end
-     while continue1
-        if Roles(i) == 1
-            fprintf('Who would you like to kill?\n') 
-            chosenPlayerKilled = input('','s');
-            playersKilled = playersKilled + 1;
-        elseif Roles(i) == 2
+     while continue2 
+        for i = 1:numPlayersLeft
+            if Roles(i) == 2
                 fprintf('Who would you like to save?\n')
-                chosePlayerSaved = input('', 's');
+                chosenPlayerSaved = input('', 's');
+                for i = 1:numPlayersLeft
+                    if chosenPlayerSaved == Name(i)
+                        chosenPlayerSavedIndex = i;
+                        tempimmunity(chosenPlayerSavedIndex) = true;
+                    end %Change immunity back at end of 
+                end
+            
+            elseif Roles(i) == 1
+                fprintf('Who would you like to kill?\n') 
+                chosenPlayerKilled = input('','s');
+                    for i = 1:numPlayersLeft
+                        if chosenPlayerKilled == Name(i)
+                            chosenPlayerKilledIndex = i;
+                        end
+                    end
         elseif Roles(i) == 3
                 fprintf('Who would you like to investigate?')
-            else 
+                investigatedPlayer = input('', 's');
+                for i = 1:numPlayersLeft
+                    if investigatedPlayer == Name(i)
+                        investigatedPlayerIndex = i;
+                        fprintf('%s is ', investigatedPlayer)
+                            if Roles(investigatedPlayerIndex) == 1
+                                 fprintf('This player is in the Mafia.')
+                            elseif Roles(investigatedPlayerIndex) == 2
+                                 fprintf('This player is a doctor.')
+                            elseif Roles(investigatedPlayerIndex) == 3
+                                fprintf('This player is a detective.')
+                            else
+                                 Roles(investigatedPlayerIndex) == 4
+                                 fprintf('This player is a civilian.')
+                            end
+                    end
+                end
+                            
+            else %Asking civilian
                 fprintf('Who do you think is in the Mafia?') 
+            end 
         end
                 continue1 = false;
       end
     end
-    %Ask players given prompts based on their roles 
-    % (is user civilian, mafia, doctor, or detective? 
-    % Mafia = 1, Doctor = 2, Detective = 3, Civilian = 4
+    
+   if chosenPlayerSavedIndex == chosenPlayerKilledIndex 
+      chosenPlayerSaved = true;
+   else 
+       playersKilled = playersKilled + 1;
+   end
+    day = ~day;
+    Round = Round + 1; %One round is day + night
     NightRound = NightRound + 1;  
  end
- day = ~day;
- Round = Round + 1; %One round is day + night
-end
-
-
-
-
+ end
 
