@@ -1,4 +1,3 @@
-
 clear
 clc
 close all
@@ -117,7 +116,7 @@ while ~ gameOver %While NOT game over
                             chosenPlayerSavedIndex = input('');
                             tempimmunity(chosenPlayerSavedIndex) = 1;
                             while ~continue3
-                                fprintf('You chose player %i, ', chosenPlayerSavedIndex)
+                                fprintf('You chose player %i. ', chosenPlayerSavedIndex)
                                 fprintf('The Mafia can no longer kill this person this round.\n')
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
@@ -133,6 +132,7 @@ while ~ gameOver %While NOT game over
                             fprintf('You chose to kill player %i \n', chosenPlayerKilledIndex)
                             fprintf('If those doctor chooses to save this player they will remain in the game.\n')
                             i = i + 1;
+                            
                             while ~continue3
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
@@ -151,7 +151,7 @@ while ~ gameOver %While NOT game over
                             elseif Roles(investigatedPlayerIndex) == 2
                                 fprintf('This player is not suspicious.\n')
                             elseif Roles(investigatedPlayerIndex) == 3
-                                fprintf('This is you!')
+                                fprintf('This is you!\n')
                             else
                                 % Roles(investigatedPlayerIndex) == 4
                                 fprintf('This player may be suspicious.\n')
@@ -178,6 +178,7 @@ while ~ gameOver %While NOT game over
                         end
                         continue1 = false;
                         continue2 = false;
+                        clc
                     end 
                 end
             end
