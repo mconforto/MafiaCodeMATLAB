@@ -1,4 +1,5 @@
 
+
 clear
 clc
 close all
@@ -94,7 +95,7 @@ while ~ gameOver %While NOT game over
             tempimmunity(i) = 0; %0 is 0 immunity whereas 1 is immunity = true
         end
     end
-    chosenPlayerSaved = false;                          %DAY ENDS
+    chosenPlayerSaved = false; %DAY ENDS
     while ~day %is Night
         RolesAcc = 0;
         continue3 = true;
@@ -180,13 +181,11 @@ while ~ gameOver %While NOT game over
                                 end
                             end
                         end
-                        if RolesAcc == 4
-                            continue2 = false; 
+                        
+                        continue1 = false;
+                        continue2 = false; 
+                        
                         clc
-                        else 
-                            continue2 = true;
-                        clc
-                        end
                     end 
                 end
             end
