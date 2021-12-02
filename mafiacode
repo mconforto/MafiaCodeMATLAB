@@ -1,3 +1,4 @@
+
 clear
 clc
 close all
@@ -56,7 +57,7 @@ chosenPlayersSaved = 0;
 playersKilled = 0;
 chosenPlayerSavedIndex = 0;
 chosenPlayerKilledIndex = 0;
-
+continue2 = false;
 for i = 1:numPlayersLeft %Doctor: Players start off with 0 immunity
     tempimmunity(i) = 0;
     susIndex(i) = 0;
@@ -93,10 +94,9 @@ while ~ gameOver %While NOT game over
             tempimmunity(i) = 0; %0 is 0 immunity whereas 1 is immunity = true
         end
     end
-    chosenPlayerSaved = false; %DAY ENDS
+    chosenPlayerSaved = false;                          %DAY ENDS
     while ~day %is Night
-        k = 1;
-        continue2 = false;
+        RolesAcc = 0;
         continue3 = true;
         while ~continue2
             for i = 1:numPlayersLeft
@@ -123,6 +123,7 @@ while ~ gameOver %While NOT game over
                                 i = i + 1;
                                 if ContInput3 == 'c'
                                     continue3 = true; 
+                                    RolesAcc = RolesAcc + 1;
                                 end
                             end
                         elseif (Roles(i) == 1 && continue3 == true) || (i == 1 && Roles(i) == 1)
@@ -130,14 +131,15 @@ while ~ gameOver %While NOT game over
                             fprintf('You''re in the Mafia.\nWho would you like to kill? (Enter player #)\n')
                             chosenPlayerKilledIndex = input('');
                             fprintf('You chose to kill player %i \n', chosenPlayerKilledIndex)
-                            fprintf('If those doctor chooses to save this player they will remain in the game.\n')
+                            fprintf('If the doctor chooses to save this player they will remain in the game.\n')
                             i = i + 1;
                             
                             while ~continue3
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
                                 if ContInput3 == 'c'
-                                    continue3 = true;    
+                                    continue3 = true;
+                                    RolesAcc = RolesAcc + 1;
                                 end
                             end
                          
@@ -161,6 +163,7 @@ while ~ gameOver %While NOT game over
                                 ContInput3 = input('', 's');
                                 if ContInput3 == 'c'
                                     continue3 = true;
+                                    RolesAcc = RolesAcc + 1;
                                 end
                             end
                         elseif(Roles(i) == 4 && continue3 == true) || (i == 1 && Roles(i) == 4) %Asking civilian
@@ -172,13 +175,18 @@ while ~ gameOver %While NOT game over
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
                                 if ContInput3 == 'c'
-                                    continue3 = true;                  
+                                    continue3 = true;      
+                                    RolesAcc = RolesAcc + 1;
                                 end
                             end
                         end
-                        continue1 = false;
-                        continue2 = false;
+                        if RolesAcc == 4
+                            continue2 = false; 
                         clc
+                        else 
+                            continue2 = true;
+                        clc
+                        end
                     end 
                 end
             end
