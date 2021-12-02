@@ -13,10 +13,10 @@ end
 Name = [];
 for i = 1:numOfPlayers
     enteredName = false;
-    while ~ enteredName
+    while ~enteredName
         fprintf('Enter player #%i''s name: ', i);
         userInput = input('', 's');
-        if ~ ismember(userInput, Name)
+        if ~ismember(userInput, Name)
             Name{i} = userInput;
             enteredName = true;
         else
@@ -96,6 +96,7 @@ while ~ gameOver %While NOT game over
     while ~day %is Night
         k = 1;
         continue2 = false;
+        continue3 = true;
         while ~continue2
             for i = 1:numPlayersLeft
                 fprintf('It''s player %i''s turn.\nType "c" to continue.\n', i)
@@ -108,15 +109,17 @@ while ~ gameOver %While NOT game over
                 while continue2
                     for i = 1:numPlayersLeft
                         clc
-                        continue3 = false;
                         if (Roles(i) == 2 && continue3 == true) || (i == 1 && Roles(i) == 2)
                             continue3 = false;
                             fprintf('You''re the doctor.\nWho would you like to save? (Enter player #)\n')
                             chosenPlayerSavedIndex = input('');
                             tempimmunity(chosenPlayerSavedIndex) = 1;
                             while ~continue3
+                                fprintf('You chose player %i, ', chosenPlayerSavedIndex)
+                                fprintf('The Mafia can no longer kill this person this round.\n')
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
+                                i = i + 1;
                                 if ContInput3 == 'c'
                                     continue3 = true;
                                     continue2 = false;
@@ -128,6 +131,7 @@ while ~ gameOver %While NOT game over
                             chosenPlayerKilledIndex = input('');
                             fprintf('You chose to kill player %i \n', chosenPlayerKilledIndex)
                             fprintf('If those doctor chooses to save this player they will remain in the game.\n')
+                            i = i + 1;
                             while ~continue3
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
@@ -141,6 +145,7 @@ while ~ gameOver %While NOT game over
                             continue3 = false;
                             fprintf('You''re the detective.\nWho would you like to investigate? (Enter player #)\n')
                             investigatedPlayerIndex = input(''); %Player must type number of chosen player rather than name
+                            i = i + 1;
                             if Roles(investigatedPlayerIndex) == 1
                                 fprintf('This player may be suspicious.\n')
                             elseif Roles(investigatedPlayerIndex) == 2
@@ -163,6 +168,7 @@ while ~ gameOver %While NOT game over
                             continue3 = false;
                             fprintf('You are a civilian.\nWho do you think is in the Mafia? (Enter player #)\n')
                             susIndex(i) = input('');
+                            i = i + 1;
                             while ~continue3
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
@@ -173,6 +179,7 @@ while ~ gameOver %While NOT game over
                             end
                         end
                         continue1 = false;
+                        continue2 = false;
                     end
                     
                     
