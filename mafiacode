@@ -1,5 +1,4 @@
 
-
 clear
 clc
 close all
@@ -65,8 +64,7 @@ for i = 1:numPlayersLeft %Doctor: Players start off with 0 immunity
 end
 while ~ gameOver %While NOT game over
     while day %DAY TIME: Daytime description goes here
-        continue1 = false;
-       
+        continue1 = false; 
         while ~continue1
             if Round == 1 %% No deaths occur on day one
                 fprintf('Today is day 1. No voting will occur today.\nPrepare. The Mafia strikes tonight.\n')
@@ -81,14 +79,22 @@ while ~ gameOver %While NOT game over
             else % every other round
                 fprintf('Today is day %i.\n', Round)
                 fprintf('Last night, the Mafia came.\n')
-                if oldLengthPlayersKilled ~= length(playersKilled) %Updated in Night
-                    fprintf('1 player died.')
-                    oldLengthPlayersKilled = length(playersKilled);
+                if oldLengthPlayersKilled ~= playersKilled %Updated in Night
+                    fprintf('1 player died.\n\n')
+                    oldLengthPlayersKilled = playersKilled;
                 else
                     fprintf('Nobody died.')
                 end
                 fprintf('Voting will occur today. Choose wisely.\n')
-                fprintf('For now, we will revisit the actions of the players we saw last night.\n') %CONTINUE
+                fprintf('For now, we will revisit the actions of the players we saw last night.\n') 
+                continue4 = false;
+                while ~continue4
+                      fprintf('Type "c" to continue.\n')
+                      ContInput3 = input('', 's');
+                        if ContInput3 == 'c'
+                            continue4 = true;
+                        end
+                end
             end
         end
         for i = 1:numOfPlayers %Players start off with 0 immunity
@@ -109,7 +115,10 @@ while ~ gameOver %While NOT game over
                     continue2 = false;
                 end
                 while continue2
-                    
+                        RolesAcc = RolesAcc;
+                        if RolesAcc == 4
+                            continue2 = ~continue2;
+                        end
                         clc
                         if (Roles(i) == 2 && continue3 == true) || (i == 1 && Roles(i) == 2)
                             continue3 = false;
@@ -181,21 +190,20 @@ while ~ gameOver %While NOT game over
                                 end
                             end
                         end
-                        
-                        continue1 = false;
-                        continue2 = false; 
-                        
                         clc
-                    end 
+                        continue2 = false;
                 end
-            end
+                    continue2 = true;
+                end
         end
-        if chosenPlayerSavedIndex == chosenPlayerKilledIndex
-            chosenPlayerSaved = true;
-        else
+            if chosenPlayerSavedIndex == chosenPlayerKilledIndex
+                chosenPlayerSaved = true;
+            else
             playersKilled = playersKilled + 1;
-        end
-        day = ~ day;
+                numPlayersLeft = numPlayersLeft - 1;
+            end
+        day = ~day;
         Round = Round + 1; %One round is day + night
         NightRound = NightRound + 1;
+        end
     end
