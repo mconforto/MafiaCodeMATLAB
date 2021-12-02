@@ -1,4 +1,3 @@
-
 clear
 clc
 close all
@@ -58,6 +57,7 @@ playersKilled = 0;
 chosenPlayerSavedIndex = 0;
 chosenPlayerKilledIndex = 0;
 continue2 = false;
+votedPlayerIndex = 0;
 for i = 1:numPlayersLeft %Doctor: Players start off with 0 immunity
     tempimmunity(i) = 0;
     susIndex(i) = 0;
@@ -80,27 +80,59 @@ while ~ gameOver %While NOT game over
                 fprintf('Today is day %i.\n', Round)
                 fprintf('Last night, the Mafia came.\n')
                 if oldLengthPlayersKilled ~= playersKilled %Updated in Night
-                    fprintf('1 player died.\n\n')
+                    for i = 1:numOfPlayers
+                        if Roles(i) == 0
+                            deadPlayerIndex = i;
+                        end
+                    end
+                    fprintf('Player %i died.\n\n', deadPlayerIndex)
                     oldLengthPlayersKilled = playersKilled;
                 else
-                    fprintf('Nobody died.')
+                    fprintf('Nobody died.\n')
                 end
                 fprintf('Voting will occur today. Choose wisely.\n')
-                fprintf('For now, we will revisit the actions of the players we saw last night.\n') 
-                continue4 = false;
+                fprintf('For now, we will revisit the actions of the players we saw last night.\n')
+                fprintf('Discuss, then ') %fprintf doesn't support cell arrays >:(
+                continue4 = true;
                 while ~continue4
-                      fprintf('Type "c" to continue.\n')
+                      fprintf('type "c" to continue.\n')
                       ContInput3 = input('', 's');
                         if ContInput3 == 'c'
                             continue4 = true;
+                            clc
                         end
                 end
+                
+                fprintf('Players.\nIt''s time to vote.\n')
+                for i = 1:numPlayersLeft
+                    if Roles(i) ~= 0
+                    fprintf('Player %i, who do you vote for? (Enter a #)\n', i)
+                    votedPlayer{i} = input('');
+                    end
+                end
+                 for i = 1:length(numPlayersLeft) - 1
+                    if votedPlayer(i) == votedPlayer(i+1)
+                        votedPlayerOff = votedPlayerIndex(i);
+                        for i = 1:numPlayersLeft
+                            if Roles(i) == votedPlayerOff
+                                Roles(i) = 0;  
+                            end
+                            
+                        end
+                    end
+                end 
+                    if Roles(MafiaIndex) ~= 1
+                       fprintf('The civilians win!')
+                       gameOver = true;  
+                    end
             end
         end
+        
         for i = 1:numOfPlayers %Players start off with 0 immunity
             tempimmunity(i) = 0; %0 is 0 immunity whereas 1 is immunity = true
         end
     end
+    continue2 = false;
     chosenPlayerSaved = false; %DAY ENDS
     while ~day %is Night
         RolesAcc = 0;
@@ -199,11 +231,17 @@ while ~ gameOver %While NOT game over
             if chosenPlayerSavedIndex == chosenPlayerKilledIndex
                 chosenPlayerSaved = true;
             else
-            playersKilled = playersKilled + 1;
+                playersKilled = playersKilled + 1;
                 numPlayersLeft = numPlayersLeft - 1;
+                Roles(chosenPlayerKilledIndex) = 0;  
             end
         day = ~day;
         Round = Round + 1; %One round is day + night
         NightRound = NightRound + 1;
+        if numPlayersLeft < 3 && Roles(MafiaIndex) == 1
+            gameover = true;
+            fprintf('The Mafia wins!')
         end
     end
+ end
+
