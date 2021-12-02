@@ -1,3 +1,4 @@
+
 clear
 clc
 close all
@@ -58,6 +59,7 @@ chosenPlayerSavedIndex = 0;
 chosenPlayerKilledIndex = 0;
 for i = 1:numPlayersLeft %Doctor: Players start off with 0 immunity
     tempimmunity(i) = 0;
+    susIndex(i) = 0;
 end
 while ~ gameOver %While NOT game over
     while day %DAY TIME: Daytime description goes here
@@ -117,6 +119,7 @@ while ~ gameOver %While NOT game over
                                 ContInput3 = input('', 's');
                                 if ContInput3 == 'c'
                                     continue3 = true;
+                                    continue2 = false;
                                 end
                             end
                         elseif (Roles(i) == 1 && continue3 == true) || (i == 1 && Roles(i) == 1)
@@ -130,6 +133,7 @@ while ~ gameOver %While NOT game over
                                 ContInput3 = input('', 's');
                                 if ContInput3 == 'c'
                                     continue3 = true;
+                                    continue2 = false;
                                 end
                             end
                          
@@ -152,17 +156,19 @@ while ~ gameOver %While NOT game over
                                 ContInput3 = input('', 's');
                                 if ContInput3 == 'c'
                                     continue3 = true;
+                                    continue2 = false;
                                 end
                             end
-                        else %(Roles(i) == 4 && continue3 == true) || (i == 1 && Roles(i) == 4) %Asking civilian
+                        elseif(Roles(i) == 4 && continue3 == true) || (i == 1 && Roles(i) == 4) %Asking civilian
                             continue3 = false;
                             fprintf('You are a civilian.\nWho do you think is in the Mafia? (Enter player #)\n')
-                            sus = input('');
+                            susIndex(i) = input('');
                             while ~continue3
                                 fprintf('Type "c" to continue.\n')
                                 ContInput3 = input('', 's');
                                 if ContInput3 == 'c'
                                     continue3 = true;
+                                    continue2 = false;
                                 end
                             end
                         end
