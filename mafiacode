@@ -1,7 +1,7 @@
 clear
 clc
 close all
-
+%% MAFIA
 %Beginning statements
 numOfPlayers = input('Enter number of players: ');
 while numOfPlayers < 4
@@ -58,12 +58,14 @@ chosenPlayerSavedIndex = 0;
 chosenPlayerKilledIndex = 0;
 continue2 = false;
 votedPlayerIndex = 0;
+votedPlayer = [];
 for i = 1:numPlayersLeft %Doctor: Players start off with 0 immunity
     tempimmunity(i) = 0;
     susIndex(i) = 0;
 end
-while ~ gameOver %While NOT game over
-    while day %DAY TIME: Daytime description goes here
+while ~gameOver %While NOT game over
+    while day && ~gameOver
+        %DAY TIME: Daytime description goes here
         continue1 = false; 
         while ~continue1
             if Round == 1 %% No deaths occur on day one
@@ -93,7 +95,7 @@ while ~ gameOver %While NOT game over
                 fprintf('Voting will occur today. Choose wisely.\n')
                 fprintf('For now, we will revisit the actions of the players we saw last night.\n')
                 fprintf('Discuss, then ') %fprintf doesn't support cell arrays >:(
-                continue4 = true;
+                continue4 = false;
                 while ~continue4
                       fprintf('type "c" to continue.\n')
                       ContInput3 = input('', 's');
@@ -104,37 +106,39 @@ while ~ gameOver %While NOT game over
                 end
                 
                 fprintf('Players.\nIt''s time to vote.\n')
-                for i = 1:numPlayersLeft
+                for i = 1:numOfPlayers
                     if Roles(i) ~= 0
                     fprintf('Player %i, who do you vote for? (Enter a #)\n', i)
-                    votedPlayer{i} = input('');
+                    votedPlayer(i) = input('');
                     end
                 end
-                 for i = 1:length(numPlayersLeft) - 1
+                 for i = 1:length(numPlayersLeft)-1
                     if votedPlayer(i) == votedPlayer(i+1)
-                        votedPlayerOff = votedPlayerIndex(i);
-                        for i = 1:numPlayersLeft
-                            if Roles(i) == votedPlayerOff
-                                Roles(i) = 0;  
+                        votedPlayerOff = votedPlayer(i);
+                        for x = 1:numOfPlayers
+                            if Roles(x) == votedPlayerOff
+                                Roles(x) = 0;  
                             end
                             
                         end
                     end
                 end 
                     if Roles(MafiaIndex) ~= 1
-                       fprintf('The civilians win!')
+                       fprintf('The civilians win!\n')
                        gameOver = true;  
+                       break;
                     end
             end
+            continue1 = true;
         end
-        
+        day = false; 
         for i = 1:numOfPlayers %Players start off with 0 immunity
             tempimmunity(i) = 0; %0 is 0 immunity whereas 1 is immunity = true
         end
     end
     continue2 = false;
-    chosenPlayerSaved = false; %DAY ENDS
-    while ~day %is Night
+    chosenPlayerSaved = false;          %DAY ENDS
+    while ~day && ~gameOver %is Night
         RolesAcc = 0;
         continue3 = true;
         while ~continue2
@@ -239,8 +243,9 @@ while ~ gameOver %While NOT game over
         Round = Round + 1; %One round is day + night
         NightRound = NightRound + 1;
         if numPlayersLeft < 3 && Roles(MafiaIndex) == 1
-            gameover = true;
-            fprintf('The Mafia wins!')
+            gameOver = true;
+            fprintf('The Mafia wins!\n')
+            break;
         end
     end
  end
