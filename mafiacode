@@ -64,7 +64,7 @@ for i = 1:numPlayersLeft %Doctor: Players start off with 0 immunity
     susIndex(i) = 0;
 end
 while ~gameOver %While NOT game over
-    while day && ~gameOver
+    while day && ~gameOver 
         %DAY TIME: Daytime description goes here
         continue1 = false; 
         while ~continue1
@@ -89,6 +89,11 @@ while ~gameOver %While NOT game over
                     end
                     fprintf('Player %i died.\n\n', deadPlayerIndex)
                     oldLengthPlayersKilled = playersKilled;
+                    if Roles(MafiaIndex) ~= 1
+                        fprintf('The civilians win!\n')
+                         gameOver = true;  
+                      break;
+                     end
                 else
                     fprintf('Nobody died.\n')
                 end
@@ -247,6 +252,7 @@ while ~gameOver %While NOT game over
             fprintf('The Mafia wins!\n')
             break;
         end
+         
     end
  end
 
